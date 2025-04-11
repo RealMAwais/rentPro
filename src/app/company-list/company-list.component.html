@@ -1,21 +1,12 @@
 <!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
 <nav class="navbar">
-        <button class="btn btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i class="bi bi-house-door"></i></button>
+        <button class="btn btn-primary ml-5" [routerLink]="''" title="Home"><i class="bi bi-house-door"></i></button>
         <button class="btn btn-success ml-2" (click)="exportData()"><i class="bi bi-file-earmark-text p-1"></i>XLS</button>
         <button class="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#companyModal"><i class="bi bi-plus-circle">Add</i></button>
     <div class="container-md" style="justify-content: center; padding: 2%;">
         <h1 class="navbar-header">Companies List</h1>
     </div>
 </nav>
-<!-- <div class="container mt-1 mb-2 col-4">
-    <div class="input-group">
-        <input type="text" title="Search Tenant Details" class="form-control" [(ngModel)]="searchQuery"
-            placeholder="     ... SEARCH BY BUILDING/ UNIT/ TENANT">
-        <button class="btn btn-sm btn-primary" [disabled]="!searchQuery" (click)="searchButton()">
-            <i class="bi bi-search p-2"></i>Search</button>
-        <button class="btn btn-primary ml-3" (click)="resetFilters()">Reset</button>
-    </div>
-</div> -->
 
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 <!----------------------------------------------------------- COMPANY LIST DISPLAY HERE--------- ----------------------------------->

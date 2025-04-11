@@ -131,7 +131,7 @@
             <tr *ngFor="let data of filteredRents; let i= index; " class="spaced-cell" (mouseenter)="hoveredRowIndex = i" (mouseleave)="hoveredRowIndex = -1" [ngClass]="{'lightYellow': hoveredRowIndex === i, 'lightPink': data.paidRent === 0}">
 
                 <td>{{i+1}}</td>
-                <!-- <td><button type="button" class="btn btn-download btn-sm" (click)="downloadPdf(data)" ngbTooltip="Save tenant statement"> <i class="fas fa-download"></i> </button> </td> -->
+                <!-- <td><button type="button" class="btn btn-download btn-sm" (click)="downloadPdf(data)" title="Save tenant statement"> <i class="fas fa-download"></i> </button> </td> -->
 
                 <!-- <td>
                     <button (click)="openOutlook(data)" class="btn btn-download btn-sm">

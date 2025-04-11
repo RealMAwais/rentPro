@@ -99,7 +99,7 @@ export class RentsByMonthComponent implements OnInit {
     
     // Filter expense data for Co-op Apartments
     const coopExpenseData = this.localArray_expense.filter(data => data?.propertyType === 'Co-op Apartments');
-    let coopMonthlyExpenseArr = coopExpenseData.filter(data => +data.year === currentYear);
+    let coopMonthlyExpenseArr = coopExpenseData?.filter(data => +data.year === currentYear);
     // Calculate expense sum for Co-op Apartments
     for (const exp of coopMonthlyExpenseArr) {
       if (exp.month && exp.amountPaid) {

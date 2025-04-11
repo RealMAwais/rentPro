@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BuildingTableComponent } from './building-table/building-table.component';
-// import { HomeComponent } from './home/home.component';
 import { LeaseComponent } from './lease/lease.component';
 import { IncomeExpenseSummaryComponent } from './icome-expense-summary/income-expense-summary.component';
 import { ExpenseSummaryComponent } from './expense-summary/expense-summary.component';
@@ -31,7 +30,6 @@ const routes: Routes = [
   { path: 'dashboard/company', component: CompanyListComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/unit', component: UnitListComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  // { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
