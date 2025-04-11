@@ -29,7 +29,6 @@ import { CompanyListComponent } from './company-list/company-list.component';
 import { UnitListComponent } from './unit-list/unit-list.component';
 import { NgxUiLoaderModule, NgxUiLoaderRouterModule } from "ngx-ui-loader";
 import { MatDialogModule } from '@angular/material/dialog';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { MonthlyRentInvoiceComponent } from './monthly-rent-invoice/monthly-rent-invoice.component';
 import { ToastrModule } from 'ngx-toastr';
@@ -108,10 +107,9 @@ import { LoaderService } from './services/loader.service';
       textColor: '#FFFFFF',
       textPosition: 'center-center',
     }),
-    NgxUiLoaderRouterModule.forRoot({ showForeground: true }), NgbModule,
+    NgxUiLoaderRouterModule.forRoot({ showForeground: true }),
     ToastrModule.forRoot(), MatFormFieldModule,
-    MatSelectModule,
-    NgbModule
+    MatSelectModule
   ],
   providers: [
     ApiService,

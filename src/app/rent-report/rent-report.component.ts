@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { ApiService } from '../services/api.service';
 import 'jspdf-autotable';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import 'bootstrap';
 import { DataSharingService } from '../services/data-sharing.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -66,7 +65,6 @@ export class RentReportComponent implements OnInit {
 
   constructor(
     public ApiService: ApiService,
-    private modalService: NgbModal,
     private dataSharingService: DataSharingService,
     private dialog: MatDialog,
     private toastr: ToastrService,
@@ -231,7 +229,6 @@ export class RentReportComponent implements OnInit {
     this.selectedChequeImage = chequeImage;
     // console.log('image', this.selectedChequeImage);
     setTimeout(() => {
-      this.modalService.open(this.chequeImageModal, { centered: true });
     }, 0);
   }
 

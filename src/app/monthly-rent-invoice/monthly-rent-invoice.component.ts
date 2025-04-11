@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import * as XLSX from 'xlsx';
 import { ApiService } from '../services/api.service';
 import 'jspdf-autotable';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (pdfMake as any).vfs = (pdfFonts as any).pdfMake?.vfs;
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
 import 'bootstrap';
 
 
@@ -40,7 +37,6 @@ export class MonthlyRentInvoiceComponent implements OnInit {
 
   constructor(
     public ApiService: ApiService,
-    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +48,6 @@ export class MonthlyRentInvoiceComponent implements OnInit {
     this.selectedChequeImage = chequeImage;
     console.log('image', this.selectedChequeImage);
     setTimeout(() => {
-      this.modalService.open(this.chequeImageModal, { centered: true });
     }, 0);
   }
 

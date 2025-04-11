@@ -4,7 +4,6 @@ import 'jspdf-autotable';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (pdfMake as any).vfs = (pdfFonts as any).pdfMake?.vfs;
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../services/loader.service';

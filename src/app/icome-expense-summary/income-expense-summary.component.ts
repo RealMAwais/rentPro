@@ -8,7 +8,6 @@ import { LoaderService } from '../services/loader.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as bootstrap from 'bootstrap';
 
 
@@ -65,7 +64,6 @@ export class IncomeExpenseSummaryComponent implements OnInit {
     private loaderService: LoaderService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private modalService: NgbModal
   ) {
   }
 
