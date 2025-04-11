@@ -1,0 +1,18 @@
+
+.search-container {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+   align-items: center;
+   justify-content: center;
+    display: flex;
+    width: 400px;;
+    margin-right: 10px;
+}
+.navbar {
+    justify-content: flex-start !important;
+}

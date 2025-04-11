@@ -1,0 +1,15 @@
+{
+  "targets": {
+    "webapp-rentpro": {
+      "hosting": {
+        "webapp-rentpro": [
+          "webapp-rentpro"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "webapp-rentpro",
+    "staging": "webapp-rentpro"
+  }
+}

@@ -1,0 +1,216 @@
+<!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
+<nav class="navbar">
+        <button class="btn btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i class="bi bi-house-door"></i></button>
+        <button class="btn btn-success ml-2" (click)="exportData()"><i class="bi bi-file-earmark-text p-1"></i>XLS</button>
+        <button class="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#companyModal"><i class="bi bi-plus-circle">Add</i></button>
+    <div class="container-md" style="justify-content: center; padding: 2%;">
+        <h1 class="navbar-header">Companies List</h1>
+    </div>
+</nav>
+<!-- <div class="container mt-1 mb-2 col-4">
+    <div class="input-group">
+        <input type="text" title="Search Tenant Details" class="form-control" [(ngModel)]="searchQuery"
+            placeholder="     ... SEARCH BY BUILDING/ UNIT/ TENANT">
+        <button class="btn btn-sm btn-primary" [disabled]="!searchQuery" (click)="searchButton()">
+            <i class="bi bi-search p-2"></i>Search</button>
+        <button class="btn btn-primary ml-3" (click)="resetFilters()">Reset</button>
+    </div>
+</div> -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!----------------------------------------------------------- COMPANY LIST DISPLAY HERE--------- ----------------------------------->
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div style="overflow-x:auto;">
+    <table id="excel_table" class="custom-table">
+        <thead>
+            <tr>
+                <th scope="col" class="columnColor">SR.</th>
+                <th scope="col" class="columnColor">COMPANY-NAME</th>
+                <th scope="col" class="columnColor">OWNER-NAME</th>
+                <th scope="col" class="columnColor">CITY</th>
+                <th scope="col" class="columnColor">STATE</th>
+                <th scope="col" class="columnColor">COMPANY TYPE</th>
+                <th scope="col" class="columnColor">ZIP CODE</th>
+                <th scope="col" class="columnColor">PHONE</th>
+                <th scope="col" class="columnColor">MOBILE</th>
+                <th scope="col" class="columnColor">EMAIL</th>
+                <th scope="col" class="columnColor">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of localArray_company| paginate:{ itemsPerPage: 100, currentPage: p, totalItems: totalLength} ; 
+            let i= index; ">
+                <td>{{i+1}}</td>
+                <td>{{data.companyName}}</td>
+                <td>{{data.owner}}</td>
+                <td>{{data.city}}</td>
+                <td>{{data.state}}</td>
+                <td>{{data.companyType}}</td>
+                <td>{{data.zip}}</td>
+                <td>{{data.phone}}</td>
+                <td>{{data.mobile}}</td>
+                <td>{{data.email}}</td>
+                <td>
+                    <!-- Edit Button trigger modal -->
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#companyModal"
+                        (click)="onEdit(data.id)" data-toggle="tooltip" data-placement="bottom" title="edit">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+
+                    <!-- Delete Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteBuildingModal" style="margin-left: 5px" (click)="deleteIndexId = data.id"
+                        data-toggle="tooltip" data-placement="bottom" title="delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<!----------------------------------------------------------- DELETE MODAL FORM DETAILS-------------------------------------------->
+<div class="modal fade" id="deleteBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Delete This Company</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="red">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="deleteCompany(deleteIndexId)"
+                    data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------------------- COMPANY MODAL-------------------------------------------------------------------->
+<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLongTitle" style="text-decoration: underline;">{{ editCompanyId ? 'Edit' : 'Enter' }} 
+                    Company Details
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="resetCompanyForm();"
+                    aria-label="Close"></button>
+            </div>
+            <!-- Company Details Modal Form Starts Here -->
+            <div class="modal-body">
+                <form [formGroup]="companyForm">
+
+                    <div class="form-group col-md-6">
+                        <label for="owner">Owner Name:<span class="span">*</span></label>
+                        <input type="text" class="form-control" formControlName="owner">
+                        <div *ngIf="fCompany.owner.touched && fCompany.owner.invalid" class="alert alert-danger">
+                            <div *ngIf="fCompany.owner.errors && fCompany.owner.errors.required"><small>Enter Owner
+                                    Name.</small></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="companyName">Company Name:<span class="span">*</span></label>
+                        <input type="text" class="form-control" formControlName="companyName">
+                        <div *ngIf="fCompany.companyName.touched && fCompany.companyName.invalid"
+                            class="alert alert-danger">
+                            <div *ngIf="fCompany.companyName.errors && fCompany.companyName.errors.required">
+                                <small>Enter Company Name.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group col-md-6">
+                        <label for="address">Address:<span class="span">*</span></label>
+                        <input type="text" class="form-control" formControlName="address">
+                        <div *ngIf="fCompany.address.touched && fCompany.address.invalid" class="alert alert-danger">
+                            <div *ngIf="fCompany.address.errors && fCompany.address.errors.required"><small>Enter
+                                    Address.</small></div>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group col-md-6">
+                        <label for="state">State:</label>
+                        <input type="text" class="form-control" formControlName="state">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="city">City:<span class="span">*</span></label>
+                        <select class="drpdown" formControlName="city">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let items of cityOptions"> {{items.value}} </option>
+                        </select>
+                        <div *ngIf="fCompany.city.touched && fCompany.city.invalid" class="alert alert-danger">
+                            <div *ngIf="fCompany.city.errors && fCompany.city.errors.required"><small>Select a
+                                    City.</small></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="companyType">Company Type:<span class="span">*</span></label>
+                        <select class="drpdown" formControlName="companyType">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let items of companyTypeOptions"> {{items.value}} </option>
+                        </select>
+                        <div *ngIf="fCompany.companyType.touched && fCompany.companyType.invalid"
+                            class="alert alert-danger">
+                            <div *ngIf="fCompany.companyType.errors && fCompany.companyType.errors.required"><small>
+                                    Select Company Type.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="zip">ZIP Code:</label>
+                        <input type="number" class="form-control" formControlName="zip">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="phone">Phone:</label>
+                        <input type="number" class="form-control" formControlName="phone">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="mobile">Mobile:<span class="span">*</span></label>
+                        <input type="number" class="form-control" formControlName="mobile" placeholder="(917) 111-0000"
+                            minlength="7">
+                        <div *ngIf="fCompany.mobile.touched && fCompany.mobile.invalid" class="alert alert-danger">
+                            <div *ngIf="fCompany.mobile.errors && fCompany.mobile.errors.required">Enter Mobile No.
+                            </div>
+                            <div *ngIf="fCompany.mobile.errors?.minlength"> Enter Valid Mobile No.</div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-md-6">
+                        <label for="email">Email:<span class="span">*</span></label>
+                        <input type="email" class="form-control" formControlName="email">
+                        <div *ngIf="fCompany.email.touched && fCompany.email.invalid" class="alert alert-danger">
+                            <div *ngIf="fCompany.email.errors && fCompany.email.errors.required"> Email is required.
+                            </div>
+                            <div *ngIf="fCompany.email.errors && fCompany.email.errors.pattern"> Please Enter valid
+                                email address.</div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="clear" class="btn btn-secondary" data-dismiss="modal"
+                    (click)="resetCompanyForm()">
+                    Reset</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="editCompanyId ? updateCompanyInFirestore() : addCompanytoFirestore()"
+                    [disabled]="companyForm.invalid">{{ editCompanyId ? 'Update' : 'Add' }} Details </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,253 @@
+<div class="nav-items">
+  <div class="nav-item-separator"></div>
+
+  <div class="nav-item" (click)="toggleVisibility('Accounts')">
+    <span>Accounts</span>
+    <i class="bi bi-plus-lg p-3"></i>
+  </div>
+
+  <div *ngIf="visibleItems['Accounts']" class="sub-items">
+    <div class="nav-item" [routerLink]="'/dashboard/company'">
+      <i class="bi bi-bank p-3"></i>
+      <span>Companies</span>
+    </div>
+    <div class="nav-item" [routerLink]="'/dashboard/building'">
+      <i class="bi bi-buildings p-3"></i>
+      <span>Buildings</span>
+    </div>
+    <div class="nav-item" [routerLink]="'/dashboard/unit'">
+      <i class="bi bi-building p-3"></i>
+      <span>Units</span>
+    </div>
+    <div class="nav-item" [routerLink]="'/dashboard/lease-summary'">
+      <i class="bi bi-file-earmark p-3"></i>
+      <span>Leases</span>
+      <div class="nav-item-separator"></div>
+    </div>
+  </div>
+
+  <div class="nav-item" (click)="toggleVisibility('dataEntry')">
+    <span>Data Entry</span>
+    <i class="bi bi-plus-lg p-3"></i>
+  </div>
+  <div *ngIf="visibleItems['dataEntry']" class="sub-items">
+    <div class="nav-item" [routerLink]="'/dashboard/rent-payments'">
+      <i class="bi bi-cash p-3"></i>
+      <span>Rent Payments</span>
+    </div>
+    <div class="nav-item" [routerLink]="'/dashboard/expense-summary'">
+      <i class="bi bi-file-diff p-3"></i>
+      <span>Expenses</span>
+      <div class="nav-item-separator"></div>
+    </div>
+  </div>
+
+  <div class="nav-item" (click)="toggleVisibility('reports')">
+    <span>Reports</span>
+    <i class="bi bi-plus-lg p-3"></i>
+  </div>
+
+  <div *ngIf="visibleItems['reports']" class="sub-items">
+    <div class="nav-item rent-summary" [routerLink]="'/dashboard/rent-summary'"
+    title="Payments & dues only">
+      <i class="bi bi-file-pdf p-3"></i>
+      <span>Payment & Dues</span>
+    </div>
+    <div class="nav-item income-expense-summary" [routerLink]="'/dashboard/income-expense-summary'"
+      title="Complete income & expense & payments & dues">
+      <i class="bi bi-file-pdf p-3"></i>
+      <span>Income & Expense <b>(complete)</b> </span>
+      <div class="nav-item-separator"></div>
+    </div>
+  </div>
+  <!-- Lease Status Section -->
+    <div class="nav-item" data-bs-toggle="modal" data-bs-target="#disableLeaseModal">
+      <span>Update Lease</span>
+      <i class="bi bi-card-list p-3"></i>
+      <div class="nav-item-separator"></div>
+    </div>
+  <!-- Rent Status Section -->
+    <div class="nav-item" data-bs-toggle="modal" data-bs-target="#updateRentModal">
+      <span>Update Rent</span>
+      <i class="bi bi-file-diff p-3"></i>
+      <div class="nav-item-separator"></div>
+    </div>
+     <!-- Create New Lease Section -->
+     <div class="nav-item" (click)="openLeaseModal()" >
+      <span>Create New Lease</span>
+      <i class="bi bi-file-plus p-3"></i>
+      <div class="nav-item-separator"></div>
+    </div>
+     <!-- Create Rent Section -->
+    <div class="nav-item" data-bs-toggle="modal" data-bs-target="#createRentModal">
+      <span>Create Monthly Rent</span>
+      <i class="bi bi-journal-plus p-3"></i>
+      <div class="nav-item-separator"></div>
+    </div>
+  <!-- <div class="nav-item" [routerLink]="'/dashboard/task'">
+    <i class="bi bi-card-list p-3"></i>
+    <span>Tasks</span>
+    <div class="nav-item-separator"></div>
+  </div> -->
+</div>
+
+<!----------------------------------------------- CREATE RENT MODAL-------------------------------------------------------------->
+<div class="modal fade" id="createRentModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title text-black" id="ModalLongTitle">
+          Create Monthly Rent
+        </h3>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="resetRentForm()"></button>
+      </div>
+
+      <div class="modal-body text-black">
+        <form [formGroup]="rentForm">
+          <div class="col-md-6">
+            <h3>Select Month</h3>
+            <input class="form-control" type="month" formControlName="rentDueDate" />
+          </div>
+
+          <div class="col-md-6">
+            <h3>Select Building<span class="span">*</span></h3>
+            <select class="drpdown form-control" formControlName="building" aria-label="select"
+              (change)="onBuildingDropDown($event)">
+              <option value="">Select an option</option>
+              <option *ngFor="let item of localArray_home" [value]="item.address">
+                {{ item.address }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="clear" class="btn btn-secondary" data-dismiss="modal" (click)="resetRentForm()">
+          Reset
+        </button>
+        <button type="button" class="btn btn-primary" (click)="createRent()" data-bs-dismiss="modal">
+          Create Rent
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------------------- Disable Lease MODAL-------------------------------------------------------------->
+<div class="modal fade" id="disableLeaseModal" tabindex="-1" aria-labelledby="disableLeaseModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title text-black" id="disableLeaseModalLabel">
+          Update Lease Status
+        </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetLeases()"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-3" placeholder="Search leases by tenant name, ID, or property"
+          [(ngModel)]="searchQuery" (keyup.enter)="searchLeases()" />
+        <button class="btn btn-primary" [disabled]="!searchQuery" (click)="searchLeases()">
+          Search
+        </button>
+        <button class="btn btn-primary ml-2" [disabled]="!searchQuery" (click)="resetLeases()">
+          Reset
+        </button>
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Tenant Name</th>
+              <th>Lease ID</th>
+              <th>Unit</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lease of filteredLeases">
+              <td>
+                <i *ngIf="lease.disabled" class="bi bi-slash-circle-fill p-2" title="disabled"></i>
+                {{ lease.firstName }} {{ lease.lastName }}
+              </td>
+              <td>{{ lease.id }}</td>
+              <td>{{ lease.unitNo }}</td>
+              <td *ngIf="!lease.disabled">Active</td>
+              <td *ngIf="lease.disabled">Disabled</td>
+              <td>
+                <!-- <input type="date" class="form-control" [(ngModel)]="lease.selectedDisableDate"/> -->
+                <input type="date" class="form-control" [(ngModel)]="selectedDate[lease.id]" />
+              </td>
+              <td>
+                <button *ngIf="!lease.disabled" [disabled]="!selectedDate[lease.id]" class="btn btn-danger btn-sm" (click)="disableLease(lease.id)">
+                  Vacant
+                </button>
+                <button *ngIf="lease.disabled" [disabled]="!selectedDate[lease.id]" class="btn btn-success btn-sm" (click)="enableLease(lease.id)">
+                  Revert
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------------------- Update Rent MODAL-------------------------------------------------------------->
+<div class="modal fade" id="updateRentModal" tabindex="-1" aria-labelledby="updateRentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title text-black" id="updateRentModalLabel">
+          Update Rent
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetLeases()"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-3" placeholder="Search leases by tenant name, ID, or property" [(ngModel)]="searchQuery" />
+        <button class="btn btn-primary" [disabled]="!searchQuery" (click)="searchLeases()">
+          Search
+        </button>
+        <button class="btn btn-primary ml-2" [disabled]="!searchQuery" (click)="resetLeases()">
+          Reset
+        </button>
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Tenant Name</th>
+              <th>Unit</th>
+              <th>Lease Status</th>
+              <th>Rent</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rent of filteredLeases">
+              <td>
+                <i *ngIf="rent.disabled" class="bi bi-slash-circle-fill p-2" title="disabled"></i>
+                {{ rent.firstName }} {{ rent.lastName }}
+              </td>
+              <td>{{ rent.unitNo }}</td>
+              <td *ngIf="!rent.disabled">Active</td>
+              <td *ngIf="rent.disabled">Disabled</td>
+              <td>
+                <input type="number" [disabled]="rent.propertyType === 'Co-op Apartments'" [(ngModel)]="rent.legalRent" class="input-small">
+              </td>
+              <td>
+                <button class="btn btn-success btn-sm" [disabled]="rent.propertyType === 'Co-op Apartments'" (click)="updateRent(rent)">
+                  Update
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

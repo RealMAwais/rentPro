@@ -1,0 +1,313 @@
+ /* You can add global styles to this file, and also import other style files */
+ @import '~bootstrap/dist/css/bootstrap.min.css';
+
+ .line-container {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ .line {
+     flex-grow: 1;
+     border: none;
+     border-top: 1px solid #ccc;
+ }
+
+ .line-label {
+     margin: 0 10px;
+     font-weight: bold;
+ }
+
+ .navbar {
+     background-color: #405061;
+     color: white;
+     text-align: justify;
+ }
+
+ .navbar-header {
+     letter-spacing: 5px !important;
+     /* position: absolute; */
+     width: 100%;
+     height: 20px;
+     left: 0;
+     text-align: center;
+     margin: 0 auto;
+ }
+
+ .navbar_bg {
+     background-image: url('/assets/images/login_bg.jpg');
+     height: fit-content;
+     background-position: center;
+     background-repeat: no-repeat;
+     background-size: auto;
+ }
+
+ h3 {
+     color: black;
+     text-transform: capitalize;
+     text-decoration: underline;
+     text-shadow: #70c5c0;
+ }
+
+ .red {
+     color: red;
+     font-weight: bold;
+ }
+
+ .selectFile {
+
+     justify-content: right;
+     margin-left: auto;
+ }
+
+ h1 {
+     color: aliceblue;
+ }
+
+ p {
+     color: aliceblue;
+ }
+
+ .slider {
+     width: auto;
+     height: 450px;
+ }
+
+ .pagination {
+     float: right;
+     font-size: 17px;
+ }
+
+ .pointer {
+     cursor: pointer;
+     margin-left: 10px;
+     color: black !important;
+     background-color: whitesmoke;
+ }
+
+ .columnColor {
+     background: #70c5c0;
+ }
+
+ table {
+     border-collapse: collapse;
+     border-spacing: 0;
+     width: 100%;
+     border: 1px solid #ddd;
+     margin-left: auto;
+     /* margin-right: auto; */
+ }
+
+ th,
+ td {
+     text-align: left;
+     padding: 8px;
+     /* margin-right: auto; */
+ }
+
+ tr:nth-child(even) {
+     background-color: #f2f2f2
+ }
+
+ .overlay {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     z-index: 2;
+     backdrop-filter: blur(2px);
+ }
+
+ .menu-btn {
+     text-align: center;
+     justify-content: center;
+     width: auto;
+     font-weight: bolder;
+ }
+
+ .span {
+     color: red;
+     font-size: large
+ }
+
+ .row_headers {
+     background-color: rgb(33, 33, 33);
+     font-weight: bolder;
+     color: white;
+     text-align: center;
+     padding: 10px;
+     font-size: large;
+ }
+
+ .drpdown {
+     width: 250px;
+     height: 35px;
+ }
+
+ .row_data {
+     text-align: center;
+     padding: 0.5%;
+ }
+
+ .button_width {
+     width: 200px;
+     height: auto;
+     text-align: right !important;
+ }
+
+ .login_container {
+     justify-content: center;
+     text-align: center;
+     margin: 0 auto;
+     display: flex;
+ }
+
+ .welcome_msg {
+     margin-top: 10px;
+     text-align: center;
+     background-color: white;
+     opacity: 70%;
+ }
+
+ .login_container:hover {
+     opacity: 2;
+ }
+
+ .bg_img {
+     background-image: url('/assets/images/login_bg.jpg');
+     height: 100%;
+     background-position: center;
+     background-repeat: no-repeat;
+     background-size: cover;
+ }
+
+ html,
+ body {
+     height: 100%;
+ }
+
+ body {
+     margin: 0 auto;
+     font-family: Roboto, "Helvetica Neue", sans-serif;
+ }
+
+ .nowrap-cell {
+     white-space: nowrap;
+ }
+
+ .spaced-cell {
+     padding: px;
+     border: 1px solid #ccc;
+     align-items: center;
+ }
+
+ .search-wrapper {
+     align-items: center;
+     justify-content: center;
+     margin-top: 3px;
+     width: 180px;
+     position: sticky;
+ }
+
+ .custom-dropdown {
+     width: 80%;
+     margin-top: 5px;
+     height: 25px;
+ }
+
+ .mr-2 {
+     margin-right: 2px;
+ }
+
+ .mr-3 {
+     margin-right: 3px;
+ }
+
+ .mr-4 {
+     margin-right: 4px;
+ }
+
+ .mr-5 {
+     margin-right: 5px;
+ }
+ .mr-50 {
+    margin-right: 50px;
+}
+
+ .ml-2 {
+     margin-left: 2px;
+ }
+
+ .ml-3 {
+     margin-left: 3px;
+ }
+
+ .ml-4 {
+     margin-left: 4px;
+ }
+
+ .ml-50 {
+     margin-left: 90px;
+ }
+
+ .right {
+     text-align: right !important;
+ }
+
+ .left {
+     text-align: left !important;
+ }
+
+
+ .pdf-btn {
+     background-color: red;
+     color: white;
+     border: none;
+     padding: 5px 10px;
+     border-radius: 5px;
+     cursor: pointer;
+ }
+
+ .xls-btn {
+     background-color: green;
+     color: white;
+     border: none;
+     padding: 5px 10px;
+     border-radius: 5px;
+     cursor: pointer;
+ }
+ 
+ .table-container {
+    max-height: 100vh;
+}
+
+ .custom-table {
+     border-collapse: collapse;
+     width: 100%;
+ }
+
+ .custom-table td {
+     border: 1px solid #e1e1e1;
+     padding: 8px;
+     text-overflow: ellipsis;
+ }
+
+ .custom-table th {
+     background-color: rgb(3, 125, 187);
+     color: white;
+     font-weight: 250;
+     border: 1px solid #e1e1e1;
+     padding: 8px;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .lightYellow {
+     background-color: #f7f78d !important;
+ }
+
+ .home-btn {
+     margin-right: auto;
+ }

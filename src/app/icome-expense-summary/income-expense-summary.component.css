@@ -1,0 +1,16 @@
+.show {
+    display: block;
+}
+.rent-table {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.red-ball {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 5px;
+  }

@@ -1,0 +1,3 @@
+.mat-dialog-content {
+    white-space: pre-line; /* This will preserve newline characters and wrap the text */
+  }

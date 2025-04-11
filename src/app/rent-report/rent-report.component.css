@@ -1,0 +1,108 @@
+.columnWidth {
+    width: 100%;
+    /* Adjust the width as needed */
+    white-space: nowrap;
+    /* Prevent text from wrapping onto the next line */
+    overflow: hidden;
+    /* Hide any overflow beyond the specified width */
+    text-overflow: ellipsis;
+    /* Display an ellipsis (...) when the text exceeds the width */
+}
+
+.actionsColumn {
+    white-space: nowrap;
+    /* Prevent text from wrapping onto the next line */
+}
+
+.actionsColumn button {
+    margin-right: 5px;
+    /* Add some margin between the buttons */
+}
+
+.sort-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.sort-icon i {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.sort-icon i:hover {
+    opacity: 1;
+}
+
+.sort-icon i.active {
+    visibility: visible;
+}
+
+/* ////////////////////// */
+.custom-main {
+    margin-top: 2px;
+    overflow-x: auto;
+}
+
+.table {
+    margin-left: 5px;
+    /* flex-grow: 1; */
+    /* padding-bottom: 14px; */
+}
+
+table,
+thead,
+tbody,
+th,
+td {
+    font-size: 12px;
+}
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-btn {
+    margin-left: auto;
+}
+
+.search-input {
+    display: flex;
+    align-items: center;
+}
+
+.lightPink {
+    background-color: lightpink;
+}
+
+.dropdown-list {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 1;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    width: 130px;
+    -webkit-text-stroke: thin;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.show {
+    display: block;
+}
+
+.red-ball {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 5px;
+  }

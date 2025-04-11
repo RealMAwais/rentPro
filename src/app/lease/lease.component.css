@@ -1,0 +1,25 @@
+
+.search-container {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+   align-items: center;
+   justify-content: center;
+    display: flex;
+    width: 400px;;
+    margin-right: 10px;
+}
+
+.input-small {
+    width: 59px;
+}
+.small-70 {
+    width: 70px;
+}
+.navbar {
+    justify-content: flex-start !important;
+}

@@ -1,0 +1,40 @@
+.columnWidth {
+    width: 100%;
+    /* Adjust the width as needed */
+    white-space: nowrap;
+    /* Prevent text from wrapping onto the next line */
+    overflow: hidden;
+    /* Hide any overflow beyond the specified width */
+    text-overflow: ellipsis;
+    /* Display an ellipsis (...) when the text exceeds the width */
+}
+
+.actionsColumn {
+    white-space: nowrap;
+    /* Prevent text from wrapping onto the next line */
+}
+
+.actionsColumn button {
+    margin-right: 5px;
+    /* Add some margin between the buttons */
+}
+
+.sort-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.sort-icon i {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.sort-icon i:hover {
+    opacity: 1;
+}
+
+.sort-icon i.active {
+    visibility: visible;
+}

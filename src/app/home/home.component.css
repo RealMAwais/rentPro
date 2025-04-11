@@ -1,0 +1,38 @@
+/* .line-container {
+    position: relative;
+}
+
+.line-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 0 10px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.line {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+} */
+
+.line-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .line {
+    flex-grow: 1;
+    border: none;
+    border-top: 1px solid #ccc;
+  }
+  
+  .line-label {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+  

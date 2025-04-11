@@ -1,0 +1,56 @@
+.chart {
+    transition: transform 0.3s ease;
+}
+
+.chart:hover {
+    transform: scale(1.2);
+}
+.income-figures{
+    background-color: lightgreen;
+    /* border-radius: 1rem; */
+    margin-top: 12px;
+    width: 83%;
+    margin-left: 25px;
+}
+
+.expense-figures{
+    background-color: yellowgreen;
+    /* border-radius: 1rem; */
+    margin-top: 12px;
+    width: 83%;
+    margin-left: 25px;
+    box-shadow: 20px;
+}
+.payable-figures{
+    background-color: lightgreen;
+    /* border-radius: 1rem; */
+    margin-top: 5px;
+    width: 83%;
+    margin-left: 25px;
+    bottom: 0;
+}
+.message-figures{
+    margin-top: 5px;
+    width: 83%;
+    margin-left: 25px;
+}
+.rentResidentialPaid-figures{
+    background-color: lightskyblue;
+    border-radius: 1rem;
+    margin-top: 12px;
+    width: 70%;
+    margin-left: 40px;
+    bottom: 0;
+}
+
+.building-dropdown{
+    width: 100px;
+    height: 100px;
+    margin-top: 50px;
+    margin-left: 22px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: nowrap;
+}

@@ -1,0 +1,509 @@
+<!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
+<nav class="navbar">
+    <button class="btn btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i class="bi bi-house-door"></i></button>
+    <button class="btn btn-success ml-2" (click)="exportData()"><i class="bi bi-file-earmark-text p-1"></i>XLS</button>
+    <div data-bs-toggle="modal" data-bs-target="#leaseModal">
+        <button class="btn btn-primary ml-2"><i class="bi bi-plus-circle">Add</i></button>
+    </div>
+    <div class="container-md" style="justify-content: center; padding: 2%;">
+        <h1 class="navbar-header">Lease Summary Report</h1>
+    </div>
+</nav>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!----------------------------------------------------------- LEASE TABLE DISPLAY HERE--------- ----------------------------------->
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div class="container mt-1 mb-2 col-4">
+    <div class="input-group">
+        <input type="text" title="Search Tenant Details" class="form-control" [(ngModel)]="searchQuery"
+            placeholder="     ... SEARCH BY BUILDING/ UNIT/ TENANT" (keyup.enter)="searchButton()">
+        <button class="btn btn-sm btn-primary" [disabled]="!searchQuery" (click)="searchButton()">
+            <i class="bi bi-search p-2"></i>Search</button>
+        <button class="btn btn-primary ml-3" (click)="resetFilters()">Reset</button>
+    </div>
+</div>
+<div class="table-container responsive">
+    <table id="excel_table" class="custom-table" *ngIf="filteredlease && filteredlease.length > 0">
+        <thead>
+            <tr>
+                <th scope="col" class="columnColor ">SR.</th>
+                <th scope="col" class="columnColor">BUILDING-NAME</th>
+                <th scope="col" class="columnColor">UNIT</th>
+                <th scope="col" class="columnColor">PROPERTY TYPE</th>
+                <th scope="col" class="columnColor">UNIT TYPE</th>
+                <th scope="col" class="columnColor">TENANT NAME</th>
+                <th scope="col" class="columnColor">LEASE ID</th>
+                <th scope="col" class="columnColor">MOBILE</th>
+                <th scope="col" class="columnColor" *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">RENT</th>
+                <th scope="col" class="columnColor" *ngIf="filteredlease[0].propertyType === 'Co-op Apartments'">MAINT.</th>
+                <th scope="col" class="columnColor">SUBLET</th>
+                <th scope="col" class="columnColor" *ngIf="filteredlease[0].propertyType === 'Co-op Apartments'">FUEL</th>
+                <th scope="col" class="columnColor" *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">START</th>
+                <th scope="col" class="columnColor" *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">END</th>
+                <th scope="col" class="columnColor">EMAIL</th>
+                <th scope="col" class="columnColor">REMARKS</th>
+                <th scope="col" class="columnColor">STATUS</th>
+                <th scope="col" class="columnColor">DISABLED DATE</th>
+                <th scope="col" class="columnColor">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let data of filteredlease; let i= index; ">
+                <td>{{i+1}}</td>
+                <td>{{data.building}}</td>
+                <td class="small-70">{{data.unitNo}}</td>
+                <td>{{data.propertyType}}</td>
+                <td>{{data.unitType}}</td>
+                <td style="width: 150px;">{{data.firstName}} {{data.lastName}}</td>
+                <td><i *ngIf="data.disabled" class="bi bi-slash-circle-fill p-2" title="disabled"></i>{{data.id}}</td>
+                <td>{{data.mobile}}</td>
+                <td class="input-small" *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">{{data?.legalRent | currency: 'USD'}}</td>
+                <td class="input-small" *ngIf="filteredlease[0].propertyType === 'Co-op Apartments'">{{data?.maintenanceFee | currency: 'USD'}}</td>
+                <td class="input-small">{{data.subletAmount | currency: 'USD'}}</td>
+                <td *ngIf="filteredlease[0].propertyType === 'Co-op Apartments'">{{data?.fuelCharges | currency: 'USD'}}</td>
+                <td *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">{{data?.leaseStartDate}}</td>
+                <td *ngIf="filteredlease[0].propertyType !== 'Co-op Apartments'">{{data?.leaseEndDate}}</td>
+                <td>{{data.email}}</td>
+                <td>{{data.remarks}}</td>
+                <td>{{data.disabled}}</td>
+                <td>{{data.disabledDate}}</td>
+                <td>
+                    <!-- Disable Button trigger modal -->
+                    <button *ngIf="!data.disabled" type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#disableLeaseModal" (click)="prepareToEditLease(data.id)" data-toggle="tooltip"
+                        data-placement="bottom" title="Disable">
+                        <i class="bi bi-stop-circle-fill"></i>
+                    </button>
+                    <!-- Enable Button trigger modal -->
+                    <button *ngIf="data.disabled" type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#enableLeaseModal" (click)="prepareToEditLease(data.id)" data-toggle="tooltip"
+                        data-placement="bottom" title="Enable">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </button>
+                    <!-- Edit Button trigger modal -->
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editModalCenter" style="margin-left: 5px" (click)="clickEdit(data)" data-toggle="tooltip"
+                        data-placement="bottom" title="edit">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <!-- Delete Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteBuildingModal" style="margin-left: 5px" (click)="deleteIndexId = data.id"
+                        data-toggle="tooltip" data-placement="bottom" title="delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!----------------------------------------------- LEASE DATA ENTRY MODAL-------------------------------------------------------------->
+<div class="modal fade" id="leaseModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLongTitle" style="text-decoration: underline;">Enter Lease
+                    Details
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="resetLeaseForm();"
+                    aria-label="Close"></button>
+            </div>
+            <!-- Lease Data Entry Modal Form Starts Here -->
+            <div class="modal-body">
+                <form [formGroup]="leaseForm" class="row g-3">
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label for="building">Select Building Name:<span class="span">*</span></label>
+                            <select class="drpdown form-control" formControlName="building" aria-label="select"
+                                (change)="onBuildingDropDown($event)">
+                                <option value=""> Select an option</option>
+                                <option *ngFor="let item of localArray_building" [value]="item.address"> {{item.address}}
+                                </option>
+                            </select>
+                            <div *ngIf="fLease.building.touched && fLease.building.invalid" class="alert alert-danger">
+                                <div *ngIf="fLease.building.errors && fLease.building.errors.required">
+                                    <small>Select a Building.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unitNo">Select Unit No:<span class="span">*</span></label>
+                            <select class="drpdown form-control" formControlName="unitNo"
+                                (click)="unitOptionsForSelectedBuilding()">
+                                <option value=""> Select an option</option>
+                                <option *ngFor="let item of unitOptionsArray"> {{item.unitNo}} </option>
+                            </select>
+                            <div *ngIf="fLease.unitNo.touched && fLease.unitNo.invalid" class="alert alert-danger">
+                                <div *ngIf="fLease.unitNo.errors && fLease.unitNo.errors.required">
+                                    <small>Enter Unit No.</small>
+                                </div>
+                                <div *ngIf="unitExistInLeaseArray"> Already Lease is active for this unit.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstName">First Name:<span class="span">*</span></label>
+                            <input type="text" class="form-control" formControlName="firstName">
+                            <div *ngIf="fLease.firstName.touched && fLease.firstName.invalid"
+                                class="alert alert-danger">
+                                <div *ngIf="fLease.firstName.errors && fLease.firstName.errors.required">
+                                    <small>Enter First Name.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name:<span class="span">*</span></label>
+                            <input type="text" class="form-control" formControlName="lastName">
+                            <div *ngIf="fLease.lastName.touched && fLease.lastName.invalid" class="alert alert-danger">
+                                <div *ngIf="fLease.lastName.errors && fLease.lastName.errors.required">
+                                    <small>Enter Last Name.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="socialSecurity">Social Security No:</label>
+                            <input type="text" class="form-control" formControlName="socialSecurity">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input type="number" class="form-control" formControlName="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile">Mobile:<span class="span">*</span></label>
+                            <input type="number" class="form-control" formControlName="mobile"
+                                placeholder="(917) 111-0000" minlength="7">
+
+                            <div *ngIf="fLease.mobile.touched && fLease.mobile.invalid" class="alert alert-danger">
+                                <div *ngIf="fLease.mobile.errors && fLease.mobile.errors.required">Enter Mobile No.
+                                </div>
+                                <div *ngIf="fLease.mobile.errors?.minlength"> Enter Valid Mobile No. </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:<span class="span">*</span></label>
+                            <input type="email" class="form-control" formControlName="email"
+                                placeholder="abc@example.com">
+                            <div *ngIf="fLease.email.touched && fLease.email.invalid" class="alert alert-danger">
+                                <div *ngIf="fLease.email.errors && fLease.email.errors.required"> Email is required.
+                                </div>
+                                <div *ngIf="fLease.email.errors && fLease.email.errors.pattern">
+                                    Please Enter valid email address.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="form-group" *ngIf="!isCoopApartment">
+                            <label for="legalRent">Legal Rent:</label>
+                            <input type="number" class="form-control" formControlName="legalRent">
+                        </div>
+
+                        <div class="form-group" *ngIf="!isCoopApartment">
+                            <label for="prefRent">Pref Rent:</label>
+                            <input type="number" class="form-control" formControlName="prefRent">
+                        </div>
+
+                        <div class="form-group" *ngIf="!isCoopApartment">
+                            <label for="securityHeld">Security Held:</label>
+                            <input type="number" class="form-control" formControlName="securityHeld">
+                        </div>
+                        <!-- Other Fee START -->
+                        <div class="form-group">
+                            <label for="maintenanceFee">Maintenance Fee:</label>
+                            <input type="number" class="form-control" formControlName="maintenanceFee" placeholder="$">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="internetFee">Internet Fee:</label>
+                            <input type="number" class="form-control" formControlName="internetFee" placeholder="$">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="garageFee">Garage Fee:</label>
+                            <input type="number" class="form-control" formControlName="garageFee" placeholder="$">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storageSpaceFee">Storage Space Fee:</label>
+                            <input type="number" class="form-control" formControlName="storageSpaceFee" placeholder="$">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fuelCharges">Fuel Assesment:</label>
+                            <input type="number" class="form-control" formControlName="fuelCharges" placeholder="$">
+                        </div>
+                    </div>
+                    <!-- End -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="form-group">
+                            <label for="propertyType">Property Type:</label>
+                            <input type="text" class="form-control" formControlName="propertyType">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unitType">Unit Type:</label>
+                            <input type="text" class="form-control" formControlName="unitType">
+                        </div>
+
+                        <div class="form-group" *ngIf="!isCoopApartment">
+                            <label for="leaseStartDate">Lease Start Date:</label>
+                            <input class="form-control" type="date" formControlName="leaseStartDate">
+                        </div>
+
+                        <div class="form-group" *ngIf="!isCoopApartment">
+                            <label for="leaseEndDate">Lease End Date:</label>
+                            <input class="form-control" type="date" formControlName="leaseEndDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <input type="text" class="form-control" formControlName="remarks">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="isSublet" style="padding-right: 30px;">Sublet:</label>
+                            <input mdbCheckbox class="form-check-input" type="checkbox" formControlName="isSublet">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subletAmount">Sublet Amount:</label>
+                            <input type="number" class="form-control" formControlName="subletAmount" placeholder="$56">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="clear" class="btn btn-secondary" data-dismiss="modal"
+                    (click)="resetLeaseForm()">
+                    Reset</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addLeasetoFirestore()"
+                    > Add Lease Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------- DELETE MODAL FORM DETAILS-------------------------------------------->
+<div class="modal fade" id="deleteBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Delete This Lease</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="red">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="deleteLease(deleteIndexId)"
+                    data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------- EDIT MODAL FORM DETAILS--------- ----------------------------------->
+<div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="ModalLongTitle">Edit Lease Data</h2>
+                <!----------------------------- Close Button--------------------->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form [formGroup]="leaseEditForm">
+
+                    <div class="form-group col-md-6">
+                        <label for="building">Building Name:</label>
+                        <input type="text" class="form-control" formControlName="building">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="propertyType">Property Type:</label>
+                        <input type="text" class="form-control" formControlName="propertyType">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="unitNo">Unit No:</label>
+                        <input type="text" class="form-control" formControlName="unitNo">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="unitType">Unit Type:</label>
+                        <input type="text" class="form-control" formControlName="unitType">
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        <label for="id">Lease ID:</label>
+                        <input type="text" class="form-control" formControlName="id">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name:<span class="span">*</span></label>
+                        <input type="text" class="form-control" formControlName="firstName">
+                        <div *ngIf="fLease.firstName.touched && fLease.firstName.invalid" class="alert alert-danger">
+                            <div *ngIf="fLease.firstName.errors && fLease.firstName.errors.required">
+                                <small>Enter First Name.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name:<span class="span">*</span></label>
+                        <input type="text" class="form-control" formControlName="lastName">
+                        <div *ngIf="fLease.lastName.touched && fLease.lastName.invalid" class="alert alert-danger">
+                            <div *ngIf="fLease.lastName.errors && fLease.lastName.errors.required">
+                                <small>Enter Last Name.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="socialSecurity">Social Security No:</label>
+                        <input type="text" class="form-control" formControlName="socialSecurity">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="phone">Phone:</label>
+                        <input type="number" class="form-control" formControlName="phone">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="mobile">Mobile:<span class="span">*</span></label>
+                        <input type="number" class="form-control" formControlName="mobile" placeholder="(917) 111-0000"
+                            minlength="7">
+
+                        <div *ngIf="fLease.mobile.touched && fLease.mobile.invalid" class="alert alert-danger">
+                            <div *ngIf="fLease.mobile.errors && fLease.mobile.errors.required">Enter Mobile No.
+                            </div>
+                            <div *ngIf="fLease.mobile.errors?.minlength"> Enter Valid Mobile No. </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="email">Email:<span class="span">*</span></label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="abc@example.com">
+                        <div *ngIf="fLease.email.touched && fLease.email.invalid" class="alert alert-danger">
+                            <div *ngIf="fLease.email.errors && fLease.email.errors.required"> Email is required.
+                            </div>
+                            <div *ngIf="fLease.email.errors && fLease.email.errors.pattern">
+                                Please Enter valid email address.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6" *ngIf="!isCoopApartment">
+                        <label for="legalRent">Rent:</label>
+                        <input type="number" class="form-control" formControlName="legalRent">
+                    </div>
+
+                    <div class="form-group" *ngIf="isCoopApartment">
+                        <label for="maintenanceFee">Maintenance Fee:</label>
+                        <input type="number" class="form-control" formControlName="maintenanceFee" placeholder="$">
+                    </div>
+
+                    <!-- <div class="form-group col-md-6">
+                        <label for="prefRent">Pref Rent:</label>
+                        <input type="number" class="form-control" formControlName="prefRent">
+                    </div> -->
+
+                    <div class="form-group col-md-6" *ngIf="!isCoopApartment">
+                        <label for="securityHeld">Security Held:</label>
+                        <input type="number" class="form-control" formControlName="securityHeld">
+                    </div>
+
+                    <div class="form-group col-md-6" *ngIf="!isCoopApartment">
+                        <label for="leaseStartDate">Lease Start Date:</label>
+                        <input class="form-control" type="text" formControlName="leaseStartDate">
+                    </div>
+                    
+                    <div class="form-group col-md-6" *ngIf="!isCoopApartment">
+                        <label for="leaseEndDate">Lease End Date:</label>
+                        <input class="form-control" type="text" formControlName="leaseEndDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="isSublet" style="padding-right: 30px;">Sublet:</label>
+                        <input mdbCheckbox class="form-check-input" type="checkbox" formControlName="isSublet">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subletAmount">Sublet Amount:</label>
+                        <input type="number" class="form-control" formControlName="subletAmount" placeholder="$56">
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="remarks">Remarks:</label>
+                        <input type="text" class="form-control" formControlName="remarks">
+                    </div>
+
+                    <button class="btn btn-dark mb-3" data-bs-dismiss="modal" (click)="updateLease()">
+                        Update
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------- Disable Lease Modal --------- ----------------------------------->
+<div class="modal fade" id="disableLeaseModal" tabindex="-1" aria-labelledby="disableLeaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="disableLeaseModalLabel">Disable Lease</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to disable this lease?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="disableLease()" data-bs-dismiss="modal">Disable</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------- Enable Lease Modal --------- ----------------------------------->
+<div class="modal fade" id="enableLeaseModal" tabindex="-1" aria-labelledby="enableLeaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enableLeaseModalLabel">Enable Lease</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to enable this lease?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="enableLease()" data-bs-dismiss="modal">Enable</button>
+            </div>
+        </div>
+    </div>
+</div>

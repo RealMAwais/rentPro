@@ -1,0 +1,40 @@
+<div class="chart">
+    <h4 style="text-align: center; background-color: #f0f0f0;">Rent Details of {{currentMonth}} - {{currentYear}}</h4>
+    <div *ngIf="countPaidRents === 0 && countUnpaidRents === 0" class="alert alert-warning" style="text-align: center; margin-bottom: 70px;">
+        <div><i class="bi bi-exclamation-octagon p-3"></i></div>
+        Create Rent of {{currentMonth}} to Display Chart.
+    </div>
+    <canvas *ngIf="this.countPaidRents !== 0 || this.countUnpaidRents !== 0" id="rentChart"></canvas>
+</div>
+
+<div class="building-dropdown">
+    <h2 class="nowrap-cell ml-3">SHOW BUILDING DATA:</h2>
+    <select class="drpdown" aria-label="select" (change)="onBuildingDropDown($event)">
+        <option value=""> Select an option</option>
+        <option *ngFor="let item of localArray_Building" [value]="item.address"> {{item.address | uppercase}}
+        </option>
+    </select>
+</div>
+
+<div class="chart message-figures">
+    <div class="alert alert-warning left" role="alert" *ngIf="!selectedBuildingName">
+        <i class="bi bi-info-circle-fill p-2"></i>Select a building to show income and amount payable.
+    </div>
+</div>
+
+
+<div style="background-color: #f0f0f0; padding: 2px;" *ngIf="selectedBuildingName">
+        
+    <div class="chart payable-figures">
+        <h4 style="text-align: center;">PAYABLE: <b>{{ totalPayable | currency: 'USD' }}</b></h4>
+    </div>
+
+    <div class="chart income-figures">
+        <h4 style="text-align: center;">INCOME: <b>{{ totalIncome | currency: 'USD' }}</b></h4>
+    </div>
+
+</div>
+
+<div class="chart expense-figures">
+    <h4 style="text-align: center;">TOTAL EXPENSE: <b>{{ totalExpense | currency: 'USD' }}</b></h4>
+</div>

@@ -1,0 +1,169 @@
+
+.actionsColumn {
+    white-space: nowrap;
+    /* Prevent text from wrapping onto the next line */
+}
+
+.actionsColumn button {
+    margin-right: 5px;
+    /* Add some margin between the buttons */
+}
+
+.sort-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.sort-icon i {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.sort-icon i:hover {
+    opacity: 1;
+}
+
+.sort-icon i.active {
+    visibility: visible;
+}
+
+/* ////////////////////// */
+.custom-main {
+    margin-top: 2px;
+    overflow-x: auto;
+}
+
+.custom-column {
+    align-items: center;
+    justify-content: center;
+}
+
+.first-column {
+    margin-left: 25%;
+}
+
+.save-reset-btn {
+    display: flex;
+    align-items: center;
+}
+
+.table {
+    margin-left: 2px;
+    /* flex-grow: 1; */
+    /* padding-bottom: 14px; */
+}
+
+
+table,
+thead,
+tbody,
+th,
+td {
+    font-size: 12px;
+}
+
+.input-with-dollar-sign {
+    position: relative;
+}
+
+.input-with-dollar-sign::before {
+    content: "$";
+    position: absolute;
+    left: 10px;
+    top: 25%;
+    /* transform: translateY(-50%); */
+    pointer-events: none;
+    font-size: medium;
+}
+
+.input-with-dollar-sign input {
+    padding-left: 12px;
+    /* Adjust this value to control the spacing */
+}
+
+.input-small {
+    width: 62px;
+}
+
+.input-medium {
+    width: 70px;
+}
+
+.input-dropdown {
+    width: 20px;
+    height: 18px;
+}
+
+.lightPink {
+    background-color: lightpink;
+}
+
+.small-header {
+    width: 65px !important;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 400px;
+    margin-right: 10px;
+}
+
+.ellipsis-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+  .tooltip-content {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-list {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 1;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    width: 130px;
+    -webkit-text-stroke: thin;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .show {
+    display: block;
+  }
+
+  .vacant {
+      vertical-align: text-top;
+      color: red;
+  }
+
+  .red-ball {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  
+  
+  

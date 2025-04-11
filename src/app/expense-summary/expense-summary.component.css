@@ -1,0 +1,36 @@
+
+.search-container {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 400px;
+    margin-right: 10px;
+}
+
+.dropdown-list {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 1;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    /* width: 130px; */
+    -webkit-text-stroke: thin;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-left: 2px;
+    max-width: max-content;
+    padding: 5px;
+}
+
+.show {
+    display: block;
+}

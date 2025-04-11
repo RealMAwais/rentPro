@@ -1,0 +1,324 @@
+<!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
+<nav class="navbar">
+    <div>
+        <button class="btn-sm btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i class="bi bi-house-door"></i></button>
+        <button class="btn  btn-sm btn-secondary ml-2" ngbTooltip="Save in Excel" (click)="exportExcel()"><i class="bi bi-file-earmark-text p-1"></i>Save Excel</button>
+        <button ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf()"><i class="bi bi-file-pdf p-1"></i>Save PDF</button>
+        <button data-bs-toggle="modal" data-bs-target="#expenseModal" class="btn-sm btn-primary ml-2"><i class="bi bi-plus-circle">Add</i></button>
+    </div>
+    <div class="container-md" style="justify-content: center;">
+        <h1 class="navbar-header">Expense Summary Report</h1>
+    </div>
+</nav>
+<!----------------------------------------------------------- EXPENSE TABLE DISPLAY HERE--------- ----------------------------------->
+<div class="container mb-2 mt-2">
+    <div class="row" style="justify-content: center;">
+
+        <!-- Search Input Column -->
+        <div class="col-md-auto">
+            <div class="input-group">
+                <input type="text" title="Search by Company Name or Expense Type" class="form-control"
+                    [(ngModel)]="searchQuery" placeholder="     ... type here" (keyup.enter)="searchButton()">
+                <button class="btn btn-sm btn-primary" [disabled]="!searchQuery" (click)="searchButton()">
+                    <i class="bi bi-search p-2"></i>Search
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-auto">
+            <button class="btn btn-primary" (click)="resetFilters()">
+                <i class="bi bi-arrow-counterclockwise p-1"></i> Reset
+            </button>
+        </div>
+
+        <div class="col-md-auto">
+            <button class="btn btn-secondary" (click)="toggleDropdown()">
+                Select Months
+            </button>
+            <div class="dropdown-list" [ngClass]="{ 'show': dropdownOpen }">
+                <label *ngFor="let month of monthOptions" class="dropdown-item">
+                    <input type="checkbox" [(ngModel)]="selectedMonths[month.value]">
+                    {{ month.value }}
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-auto">
+            <button class="btn btn-secondary" (click)="toggleTypesDropdown()">
+                Select Types
+            </button>
+            <div class="dropdown-list" [ngClass]="{ 'show': typesDropdownOpen }">
+                <label *ngFor="let type of expenseTypeOptions" class="dropdown-item">
+                    <input type="checkbox" [(ngModel)]="selectedTypes[type.value]">
+                    {{ type.value }}
+                </label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+    <table *ngIf="!noRecordsFound" id="expense_table" class="custom-table">
+        <thead>
+            <tr>
+                <th scope="col" class="columnColor">SR.</th>
+                <th scope="col" class="columnColor">COMPANY-NAME</th>
+                <th scope="col" class="columnColor">COMPANY-OWNER</th>
+                <th scope="col" class="columnColor">BUILDING</th>
+                <th scope="col" class="columnColor">UNIT</th>
+                <th scope="col" class="columnColor">PROPERTY-TYPE</th>
+                <th scope="col" class="columnColor">EXPENSE TYPE</th>
+                <!-- <th scope="col" class="columnColor">AMOUNT DUE</th> -->
+                <th scope="col" class="columnColor">AMOUNT PAID</th>
+                <!-- <th scope="col" class="columnColor">DUE DATE</th>
+                    <th scope="col" class="columnColor">DATE PAID</th> -->
+                <th scope="col" class="columnColor">MONTH-YEAR</th>
+                <th scope="col" class="columnColor">COMMENTS</th>
+                <th scope="col" class="columnColor">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of filteredExpense; let i= index; ">
+                <td>{{i+1}}</td>
+                <td>{{data.companyName}}</td>
+                <td>{{data.owner}}</td>
+                <td>{{data.building}}</td>
+                <td>{{data.unitNo}}</td>
+                <td>{{data.propertyType}}</td>
+                <td>{{data.expenseType}}</td>
+                <!-- <td>${{data.amountDue}}</td> -->
+                <td>{{data.amountPaid | currency: 'USD'}}</td>
+                <!-- <td>{{data.dueDate}}</td>
+                    <td>{{data.datePaid}}</td> -->
+                <td>{{data.monthYear | date : 'MM/yyyy'}}</td>
+                <td>{{data.comments}}</td>
+    
+                <td style="min-width: 100px;">
+                    <!-- Edit Button trigger modal -->
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editModalCenter" (click)="onEdit(data.id)" data-toggle="tooltip"
+                        data-placement="bottom" title="edit"><i class="bi bi-pencil"></i>
+                    </button>
+    
+                    <!-- Delete Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteBuildingModal" style="margin-left: 5px" (click)="deleteIndexId = data.id"
+                        data-toggle="tooltip" data-placement="bottom" title="delete"><i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td colspan="1"><b>Total Amount Paid:</b> </td>
+                <td colspan="1"><b>{{totalExpense | currency: 'USD'}}</b> </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Display no record found message  -->
+    <div *ngIf="noRecordsFound && hasSearchQuery" class="alert alert-warning" style="text-align: center;">No records found for this month.
+    </div>
+
+<!----------------------------------------------------------- DELETE MODAL FORM DETAILS-------------------------------------------->
+<div class="modal fade" id="deleteBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Delete This Expense</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="red">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="deleteExpense(deleteIndexId)"
+                    data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------------- EXPENSE DATA ENTRY MODAL------------------------------------------------------------>
+<div class="modal fade" id="expenseModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLongTitle" style="text-decoration: underline;">Enter Expense
+                    Details
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="resetExpenseForm();"
+                    aria-label="Close"></button>
+            </div>
+            <!-- Expense Data Entry Modal Form Starts Here -->
+            <div class="modal-body">
+                <form [formGroup]="expenseForm">
+
+                    <div class="form-group col-md-6">
+                        <label for="companyName">Select Company Name:</label>
+                        <select class="drpdown" formControlName="companyName" aria-label="select" (change)="onCompanySelected()">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let item of ownerArray" [ngValue]="item.companyName"> {{item.companyName}} </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="building">Select Building Name:</label>
+                        <select class="drpdown form-control" formControlName="building" aria-label="select"
+                            (change)="onBuildingDropDown($event)">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let item of filteredBuildingArr" [value]="item.address"> {{item.address}}
+                            </option>
+                        </select>                    
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="unitNo">Select Unit No:</label>
+                        <select class="drpdown form-control" formControlName="unitNo"
+                            (click)="unitOptionsForSelectedBuilding()">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let item of unitOptionsArray" [value]="item.unitNo"> {{item.unitNo}} </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="propertyType">Property Type:</label>
+                        <input type="text" class="form-control" formControlName="propertyType" readonly>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="expenseType">Expense Type:<span class="span">*</span></label>
+                        <select class="drpdown" formControlName="expenseType">
+                            <option value=""> Select an option</option>
+                            <option *ngFor="let items of expenseTypeOptions"> {{items.value}} </option>
+                        </select>
+                        <div *ngIf="fExpense.expenseType.touched && fExpense.expenseType.invalid"
+                            class="alert alert-danger">
+                            <div *ngIf="fExpense.expenseType.errors && fExpense.expenseType.errors.required">
+                                <small>Select an Expense
+                                    Type.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group col-md-6">
+                        <label for="amountDue">Amount Due:</label>
+                        <input type="number" class="form-control" formControlName="amountDue" placeholder="$">
+                    </div> -->
+
+                    <div class="form-group col-md-6">
+                        <label for="amountPaid">Amount Paid:</label>
+                        <input type="number" class="form-control" formControlName="amountPaid" placeholder="$">
+                    </div>
+
+                    <!-- <div class="form-group col-md-6">
+                        <label for="dueDate">Due Date:</label>
+                        <input class="form-control" type="date" formControlName="dueDate">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="datePaid">Date Paid:</label>
+                        <input class="form-control" type="date" formControlName="datePaid">
+                    </div> -->
+
+                    <div class="form-group col-md-6">
+                        <h3>Select Month</h3>
+                        <input class="form-control" type="month" formControlName="monthYear">
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="comments">Comments:</label>
+                        <input type="text" class="form-control" formControlName="comments">
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="clear" class="btn btn-secondary" data-dismiss="modal"
+                    (click)="resetExpenseForm()">
+                    Reset</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addExpensetoFirestore()"
+                    [disabled]="expenseForm.invalid"> Add Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------------------------- EDIT MODAL FORM DETAILS--------- ----------------------------------->
+<div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="editModalCenterTitle" style="text-decoration: underline;">Edit Expense Details</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="resetExpenseForm();"
+                aria-label="Close"></button>
+      </div>
+      <!-- Expense Data Entry Modal Form Starts Here -->
+      <div class="modal-body">
+        <form [formGroup]="editExpenseForm">
+            <div class="form-group col-md-6">
+                <label for="companyName">Company Name:</label>
+                <!-- <select class="drpdown" formControlName="companyName" aria-label="select" (change)="onCompanySelected()">
+                    <option value=""> Select an option</option>
+                    <option *ngFor="let item of ownerArray" [ngValue]="item.companyName"> {{item.companyName}} </option>
+                </select> -->
+                <input type="text" class="form-control" formControlName="companyName" readonly>
+            </div>
+            <!-- <div class="form-group col-md-6">
+                <label for="propertyType">Property Type:<span class="span">*</span></label>
+                <select class="drpdown" formControlName="propertyType">
+                    <option value=""> Select an option</option>
+                    <option *ngFor="let items of propertyOptions"> {{items.value}} </option>
+                </select>
+                <div *ngIf="fEdit.propertyType.touched && fEdit.propertyType.invalid" class="alert alert-danger">
+                    <div *ngIf="fEdit.propertyType.errors && fEdit.propertyType.errors.required">
+                        <small>Select Property Type.</small>
+                    </div>
+                </div>
+            </div> -->
+            <div class="form-group col-md-6">
+                <label for="expenseType">Expense Type:<span class="span">*</span></label>
+                <select class="drpdown" formControlName="expenseType">
+                    <option value=""> Select an option</option>
+                    <option *ngFor="let items of expenseTypeOptions"> {{items.value}} </option>
+                </select>
+                <div *ngIf="fEdit.expenseType.touched && fEdit.expenseType.invalid" class="alert alert-danger">
+                    <div *ngIf="fEdit.expenseType.errors && fEdit.expenseType.errors.required">
+                        <small>Select an Expense
+                            Type.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="amountPaid">Amount Paid:</label>
+                <input type="number" class="form-control" formControlName="amountPaid" placeholder="$">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="month">Month:</label>
+                <input class="form-control" type="month" formControlName="monthYear">
+            </div>
+            <div class="form-group mb-3">
+                <label for="comments">Comments:</label>
+                <input type="text" class="form-control" formControlName="comments">
+            </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="clear" class="btn btn-secondary" data-dismiss="modal"
+                (click)="resetExpenseForm()">
+          Reset
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateExpense()"> Update Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

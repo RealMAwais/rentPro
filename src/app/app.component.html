@@ -1,0 +1,14 @@
+<nav class="navbar navbar_bg" *ngIf="isHomePage()">
+    <div class="container-md">
+        <img src="assets/images/ammanagement.png" style="margin-left: 10% !important;">
+        <h1 class="navbar-header"><b>Building Management System</b></h1>
+    </div>
+    <div class="mat-button" *ngIf="isDashboard()">
+        <button mat-fab color="primary" title="Exit" (click)="logOut()">Logout</button>
+    </div>
+</nav>
+
+<ngx-ui-loader></ngx-ui-loader>
+<button mat-flat-button color="primary" class="logout-button" *ngIf="!isDashboard()"
+    [disabled]="isLoginPage()" title="Logout" (click)="logOut()"><i class="bi bi-door-closed p-1"></i>Logout</button>
+<router-outlet></router-outlet>

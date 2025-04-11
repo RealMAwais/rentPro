@@ -1,0 +1,393 @@
+<!-- Nav bar -->
+<nav class="navbar">
+    <div>
+        <button class="btn-sm btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i
+                class="bi bi-house-door"></i></button>
+        <!-- <button class="btn  btn-sm btn-secondary ml-2" ngbTooltip="Save in Excel" (click)="exportExcel()"><i
+                class="bi bi-file-earmark-text p-1"></i>Save Excel</button> -->
+        <button *ngIf="filteredRents || filteredExpense" ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('summary', true)"><i
+                class="bi bi-file-pdf p-1"></i>Summary</button>
+        <button *ngIf="filteredRents || filteredExpense" ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('detail', true)"><i
+                class="bi bi-file-pdf p-1"></i>Details</button>
+        <button *ngIf="filteredRents || filteredExpense" class="btn btn-sm btn-primary ml-1" (click)="openConfirmationDialog('summary')"
+            title="Send email"><i class="bi bi-envelope-at p-1"></i>Send Summary</button>
+        <button *ngIf="filteredRents || filteredExpense" class="btn btn-sm btn-primary ml-1" (click)="openConfirmationDialog('detail')"
+            title="Send email"><i class="bi bi-envelope-at p-1"></i>Send Details</button>
+    </div>
+    <div class="container-md text-center">
+        <h1 class="navbar-header">Income & Expense</h1>
+    </div>
+</nav>
+<!-- SearchBox -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    FILTER DATA
+                </div>
+                <div class="card-body">
+                    <form name="filterForm">
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Company:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" (change)="onCompanyDropDown($event)">
+                                    <option value="">Select Company</option>
+                                    <option *ngFor="let item of ownerArray" [ngValue]="item.companyName">{{
+                                        item.companyName }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Building:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" (change)="onBuildingDropDown($event)">
+                                    <option value="">Select Building</option>
+                                    <option *ngFor="let item of filteredBuildingArr" [ngValue]="item.address">{{
+                                        item.address }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Unit:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" (change)="onUnitDropDown($event)">
+                                    <option value="">Select Unit</option>
+                                    <option *ngFor="let item of filteredUnitArr" [ngValue]="item.unitNo">{{ item.unitNo
+                                        }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Select Months:</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-light dropdown-toggle" (click)="toggleDropdown()">
+                                    Select Months
+                                </button>
+                                <div [ngClass]="{ 'show': dropdownOpen }" class="dropdown-menu month-dropdown">
+                                    <label *ngFor="let month of monthOptions" class="dropdown-item">
+                                        <input type="checkbox" [(ngModel)]="selectedMonths[month.value]" name="selectedMonths">
+                                        {{ month.value }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Select Year:</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-light dropdown-toggle"
+                                    (click)="toggleYearDropdown()">
+                                    Select Year
+                                </button>
+                                <div [ngClass]="{ 'show': openYearDD }" class="dropdown-menu year-dropdown">
+                                    <label *ngFor="let year of YearOptions" class="dropdown-item">
+                                        <input type="checkbox" [(ngModel)]="selectedYears[year.value]" name="selectedYears">
+                                        {{ year.value }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-primary w-100" [disabled]="!this.hasSelectedCompany"
+                                    (click)="searchButton()" (keyup.enter)="searchButton()">Search</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary w-100" (click)="reset()">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    FILTER DATA
+                </div>
+                <div class="card-body">
+                    <form name="filterForm">
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Company:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" [(ngModel)]="selectedCompany"
+                                    (change)="onCompanyDropDown($event)">
+                                    <option value="">Select Company</option>
+                                    <option *ngFor="let item of ownerArray" [ngValue]="item">{{ item.companyName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Building:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" [(ngModel)]="selectedBuilding"
+                                    (change)="onBuildingDropDown($event)">
+                                    <option value="">Select Building</option>
+                                    <option *ngFor="let item of filteredBuildingArr" [ngValue]="item">{{ item.address }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Unit:</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" [(ngModel)]="selectedUnit"
+                                    (change)="onUnitDropDown($event)">
+                                    <option value="">Select Unit</option>
+                                    <option *ngFor="let item of filteredUnitArr" [ngValue]="item">{{ item.unitNo }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Select Months:</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-light dropdown-toggle" (click)="toggleDropdown()">
+                                    Select Months
+                                </button>
+                                <div [ngClass]="{ 'show': dropdownOpen }" class="dropdown-menu">
+                                    <label *ngFor="let month of monthOptions" class="dropdown-item">
+                                        <input type="checkbox" [(ngModel)]="selectedMonths[month.value]"
+                                            name="selectedMonths">
+                                        {{ month.value }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Select Year:</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-light dropdown-toggle"
+                                    (click)="toggleYearDropdown()">
+                                    Select Year
+                                </button>
+                                <div [ngClass]="{ 'show': openYearDD }" class="dropdown-menu">
+                                    <label *ngFor="let year of YearOptions" class="dropdown-item">
+                                        <input type="checkbox" [(ngModel)]="selectedYears[year.value]"
+                                            name="selectedYears">
+                                        {{ year.value }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-primary w-100" (click)="searchButton()"
+                                    (keyup.enter)="searchButton()">Search</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary w-100" (click)="reset()">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<!-- Button Container -->
+<div class="buttons-container text-center mt-3 mb-3" *ngIf="!noRecordsFound && isSearched">
+    <button class="btn btn-primary" (click)="showRentTable()">Show Income</button>
+    <button class="btn btn-primary ml-5" (click)="showExpenseTable()">Show Expense</button>
+</div>
+<!-- Rent Table -->
+<div class="table-container rent-table" *ngIf="showRent && filteredRents.length > 0">
+    <table id="rentTable" #rentTable class="custom-table">
+        <thead>
+            <tr>
+                <th scope="col">SR.</th>
+                <th scope="col">CHEQUE</th>
+                <th *ngIf="!isCoopApartment" scope="col">MOBILE</th>
+                <th scope="col">BUILDING</th>
+                <th scope="col">TENANT</th>
+                <th scope="col">UNIT</th>
+                <th *ngIf="!isCoopApartment" scope="col">LEASE DURATION</th>
+                <th scope="col">DUE DATE</th>
+                <th scope="col">PAID DATE</th>
+                <th *ngIf="!isCoopApartment" scope="col">RENT</th>
+                <th *ngIf="isCoopApartment" scope="col">MAINT.</th>
+                <th scope="col">LATE</th>
+                <th *ngIf="isCoopApartment">GARAGE</th>
+                <th *ngIf="isCoopApartment" scope="col">STORAGE</th>
+                <th *ngIf="isCoopApartment" scope="col">FUEL</th>
+                <th *ngIf="isCoopApartment" scope="col">INTERNET</th>
+                <th *ngIf="isCoopApartment" scope="col">APPLICATION</th>
+                <th *ngIf="isCoopApartment" scope="col">TRANSFER</th>
+                <th *ngIf="isCoopApartment" scope="col">ASSESSMENT</th>
+                <th *ngIf="isCoopApartment" scope="col">STARVET</th>
+                <th *ngIf="isCoopApartment" scope="col">ABAITMENT</th>
+                <th *ngIf="isCoopApartment" scope="col">MOVE IN</th>
+                <th *ngIf="isCoopApartment" scope="col">MOVE OUT</th>
+                <th *ngIf="isCoopApartment" scope="col">SENIOR</th>
+                <th *ngIf="isCoopApartment" scope="col">MISC.</th>
+                <th *ngIf="isCoopApartment" scope="col">DRIE.</th>
+                <th *ngIf="isCoopApartment" scope="col">RETURN</th>
+                <th scope="col">BALANCE</th>
+                <th scope="col">SUBLET</th>
+                <th scope="col">ADJUST</th>
+                <th scope="col">TOTAL</th>
+                <th scope="col">DISCOUNT</th>
+                <th scope="col">PAID.</th>
+                <th scope="col">DUES</th>
+                <th scope="col" class="nowrap-cell">CHEQUE NO</th>
+                <!-- <th *ngIf="isCoopApartment" scope="col">COMMENTS</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of filteredRents; let i= index; ">
+
+                <td>{{i+1}}</td>
+                <td>
+                    <a href="#" (click)="openChequeModal(data)" data-bs-toggle="modal" data-bs-target="#chequeImageModal">
+                        <i class="bi bi-image-fill"></i>
+                    </a>
+                </td>
+                <td *ngIf="!isCoopApartment">
+                    <ng-container *ngIf="data.isVacant">
+                        N/A
+                    </ng-container>
+                    <ng-container *ngIf="!data.isVacant">
+                        <span>{{data.mobile}}</span>
+                    </ng-container>
+                </td>
+                <td>{{data.building}}</td>
+                <td class="ellipsis-cell">
+                    <ng-container *ngIf="data.isVacant">
+                        <span class="red-ball" title="This unit is vacant for this month."></span>VACANT
+                    </ng-container>
+                    <ng-container *ngIf="!data.isVacant">
+                        <span>{{data.tenantName}}</span>
+                    </ng-container>
+                </td>
+                <td>{{data.unitNo}}</td>
+                <td *ngIf="!isCoopApartment">
+                    <ng-container *ngIf="data.isVacant">
+                        {{data.comments}}
+                    </ng-container>
+                    <ng-container *ngIf="!data.isVacant">
+                        {{data.leaseStartDate}} - {{data.leaseEndDate}}
+                    </ng-container>
+                </td>
+                <td>{{data.rentDueDate}}</td>
+                <td>{{data.datePaid}}</td>
+                <td *ngIf="!isCoopApartment">{{data.rent | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.maintenanceFee | currency: 'USD'}}</td>
+                <td>{{data.lateFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.garageFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.storageSpaceFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.fuelCharges | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.internetFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.applicationFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.transFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.assessFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.starVet | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.abaitment | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.moveInFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.moveOutFee | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.senior | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.miscCredit | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.drieCredit | currency: 'USD'}}</td>
+                <td *ngIf="isCoopApartment">{{data.return | currency: 'USD'}}</td>
+                <td>{{data.previousBalance | currency: 'USD'}}</td>
+                <td>{{data.subletAmount | currency: 'USD'}}</td>
+                <td>{{data.amountAdjusted | currency: 'USD'}}</td>
+                <td>{{data.totalPayable | currency: 'USD'}}</td>
+                <td>{{data.discount | currency: 'USD'}}</td>
+                <td>{{data.paidRent | currency: 'USD'}}</td>
+                <td>{{data.remainingBalance | currency: 'USD'}}</td>
+                <td class="nowrap-cell">{{data.chequeNo}}</td>
+                <!-- <td *ngIf="!isCoopApartment">{{data.comments}}</td> -->
+            </tr>
+            <tr *ngIf="!isCoopApartment">
+                <td colspan="13"></td>
+                <td class="columnColor"><b>Total:</b></td>
+                <td class="columnColor"><b>{{totalPayable | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalDiscount | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalRentPaid | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalRemainingBalance | currency: 'USD'}}</b></td>
+            </tr>
+            <tr *ngIf="isCoopApartment">
+                <td colspan="28"></td>
+                <td class="columnColor"><b>Total:</b></td>
+                <td class="columnColor"><b>{{totalPayable | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalDiscount | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalRentPaid | currency: 'USD'}}</b></td>
+                <td class="columnColor"><b>{{totalRemainingBalance | currency: 'USD'}}</b></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Display no record found message  -->
+<div *ngIf="showRent && noRecordsFound && isSearched" class="alert alert-warning"
+    style="text-align: center;">No rent record found.
+</div>
+<!-- Expense Table -->
+<div class="table-container" *ngIf="showExpense && filteredExpense.length > 0">
+    <table id="expense_table" class="custom-table">
+        <thead>
+            <tr>
+                <th scope="col" class="columnColor">SR.</th>
+                <th scope="col" class="columnColor">COMPANY-NAME</th>
+                <th scope="col" class="columnColor">COMPANY-OWNER</th>
+                <th scope="col" class="columnColor">BUILDING</th>
+                <th scope="col" class="columnColor">UNIT</th>
+                <th scope="col" class="columnColor">PROPERTY-TYPE</th>
+                <th scope="col" class="columnColor">EXPENSE TYPE</th>
+                <!-- <th scope="col" class="columnColor">AMOUNT DUE</th> -->
+                <th scope="col" class="columnColor">AMOUNT PAID</th>
+                <!-- <th scope="col" class="columnColor">DUE DATE</th>
+                <th scope="col" class="columnColor">DATE PAID</th> -->
+                <th scope="col" class="columnColor">MONTH-YEAR</th>
+                <th scope="col" class="columnColor">COMMENTS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of filteredExpense; let i= index; ">
+                <td>{{i+1}}</td>
+                <td>{{data.companyName}}</td>
+                <td>{{data.owner}}</td>
+                <td>{{data.building}}</td>
+                <td>{{data.unitNo}}</td>
+                <td>{{data.propertyType}}</td>
+                <td>{{data.expenseType}}</td>
+                <!-- <td>${{data.amountDue}}</td> -->
+                <td>{{data.amountPaid | currency: 'USD'}}</td>
+                <!-- <td>{{data.dueDate}}</td>
+                <td>{{data.datePaid}}</td> -->
+                <td>{{data.monthYear | date : 'MM/yyyy'}}</td>
+                <td>{{data.comments}}</td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td colspan="1"><b>Total Amount Paid:</b> </td>
+                <td colspan="1"><b>{{totalExpense | currency: 'USD'}}</b> </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Display no record found message  -->
+<div *ngIf="showExpense && noRecordsFound && isSearched && filteredExpense.length === 0" class="alert alert-warning"
+    style="text-align: center;">No expense record found.
+</div>
+<!-- Modal for Cheque Image -->
+<div class="modal fade" id="chequeImageModal" tabindex="-1" aria-labelledby="chequeImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="chequeImageModalLabel">Cheque Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img [src]="chequeImageSrc" class="img-fluid" alt="Cheque Image">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,169 @@
+<!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
+<nav class="navbar">
+    <div class="container-md text-center" style="padding: 2%;">
+        <h1 class="navbar-header">Monthly Rent Invoice Summary</h1>
+    </div>
+</nav>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!----------------------------------------------------------- BUILDING TABLE DISPLAY HERE--------- ----------------------------------->
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div class="table-responsive" style="overflow-x:auto;">
+    <div class="search-container">
+        <div style="margin-right: 20px;"><b>SEARCH BUILDING DATA:</b></div>
+        <input type="text" ngbTooltip="Search By Building Name" class="form-control search-input"
+            [(ngModel)]="searchQuery" placeholder="... Search" (keyup.enter)="searchButton()">
+        <button class="btn btn-primary search-button" (click)="searchButton()">Search</button>
+    </div>
+    <table id="excel_table" class="custom-table">
+        <thead>
+            <tr>
+                <th scope="col" class="columnColor columnWidth">SR.</th>
+                <th scope="col" class="columnColor columnWidth">SAVE</th>
+                <th scope="col" class="columnColor columnWidth" (click)="sortTable('BUILDING-NAME')">BUILDING-NAME
+                    <span class="sort-icon" *ngIf="sortColumn === 'BUILDING-NAME'">
+                        <i class="fas fa-caret-up" [ngClass]="{'active': sortDirection === 'asc'}"></i>
+                        <i class="fas fa-caret-down" [ngClass]="{'active': sortDirection === 'desc'}"></i>
+                    </span>
+                </th>
+                <th scope="col" class="columnColor columnWidth">TENANT NAME</th>
+                <th scope="col" class="columnColor columnWidth" (click)="sortTable('LEASE ID')">LEASE ID
+                    <span class="sort-icon" *ngIf="sortColumn === 'LEASE ID'">
+                        <i class="fas fa-caret-up" [ngClass]="{'active': sortDirection === 'asc'}"></i>
+                        <i class="fas fa-caret-down" [ngClass]="{'active': sortDirection === 'desc'}"></i>
+                    </span>
+                </th>
+                <th scope="col" class="columnColor columnWidth">UNIT NO</th>
+                <th scope="col" class="columnColor columnWidth">PROPERTY TYPE</th>
+                <th scope="col" class="columnColor columnWidth">UNIT TYPE</th>
+                <th scope="col" class="columnColor columnWidth">MONTH</th>
+                <th scope="col" class="columnColor columnWidth">YEAR</th>
+                <th scope="col" class="columnColor columnWidth">RENT DUE DATE</th>
+                <th scope="col" class="columnColor columnWidth">RENT</th>
+                <th scope="col" class="columnColor columnWidth">Maintenance Fee</th>
+                <th *ngIf="isCoOpApartments" scope="col" class="columnColor columnWidth">GARAGE FEE</th>
+                <th *ngIf="isCoOpApartments" scope="col" class="columnColor columnWidth">STORAGE FEE</th>
+                <th *ngIf="isCoOpApartments" scope="col" class="columnColor columnWidth">FUEL</th>
+                <th *ngIf="isCoOpApartments" scope="col" class="columnColor columnWidth">INTERNET FEE</th>
+                <th scope="col" class="columnColor columnWidth">TOTAL PAYABLE</th>
+                <th scope="col" class="columnColor columnWidth">PREVIOUS BALANCE</th>
+                <th scope="col" class="columnColor columnWidth text-center">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of filteredMonthlyRents | paginate:{ itemsPerPage: 8, currentPage: p, totalItems: totalLength}; let i = index;" class="spaced-cell">
+                <td>{{i+1}}</td>
+                <td>
+                    <button type="button" class="btn btn-download btn-sm" (click)="downloadAsPDF(data)">
+                        <i class="fas fa-download" ngbTooltip="Save As PDF"></i>
+                    </button>
+                </td>
+                <td class="nowrap-cell">{{data.building}}</td>
+                <td class="nowrap-cell">{{data.tenantName}}</td>
+                <td>{{data.leaseId}}</td>
+                <td>{{data.unitNo}}</td>
+                <td class="nowrap-cell">{{data.propertyType}}</td>
+                <td>{{data.unitType}}</td>
+                <td>{{data.month}}</td>
+                <td>{{data.year}}</td>
+                <td>{{data.rentDueDate}}</td>
+                <td>${{data.rent}}</td>
+                <td>{{data.maintenanceFee}}</td>
+                <td *ngIf="isCoOpApartments">{{data.garageFee}}</td>
+                <td *ngIf="isCoOpApartments">{{data.storageSpaceFee}}</td>
+                <td *ngIf="isCoOpApartments">{{data.fuelCharges}}</td>
+                <td *ngIf="isCoOpApartments">{{data.internetFee}}</td>
+                <td>{{data.totalPayable}}</td>
+                <td>{{data.previousBalance}}</td>
+
+
+                <td class="actionsColumn">
+                    <!-- Edit Button trigger modal -->
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editModalCenter" (click)="onEdit(data.id)" data-toggle="tooltip"
+                        data-placement="bottom" title="edit">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+
+                    <!-- Delete Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteBuildingModal" style="margin-left: 5px" (click)="deleteIndexId = data.id"
+                        data-toggle="tooltip" data-placement="bottom" title="delete">
+                        <i class="bi bi-trash"></i> 
+                    </button>
+                </td>
+            </tr>
+            <!-- <tr>
+                <td colspan="15"></td>
+                <td class="columnColor"><b>Total Payable:</b></td>
+                <td class="columnColor"><b>${{totalPayable}}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td> 
+            </tr> -->
+        </tbody>
+    </table>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!----------------------------------------------------------- RENT REPORT TABLE END HERE--------- ----------------------------------->
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- Pagination Display Here -->
+    <div class="pagination">
+        <pagination-controls (pageChange)="p=$event"></pagination-controls>
+    </div>
+</div>
+<!-------- Export Button Display Here ------->
+<!-- <button class="btn  btn-sm btn-secondary" ngbTooltip="Save in Excel" style="margin-left: 70px;" (click)="exportData()"><i class="fas fa-download p-1"></i>Save Excel</button>
+<button class="btn  btn-sm btn-primary" ngbTooltip="Save As PDF" style="margin-left: 10px;" (click)="exportData()"><i class="bi bi-file-pdf"></i>Save PDF</button> -->
+
+<!-- /////////////----Goto Main Menu----///////////////////// -->
+<div class="menu-btn">
+    <button mat-raised-button color="primary" title="Back to Home" [routerLink]="''"><i class="bi bi-arrow-left p-1"></i>HOME</button>
+</div>
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!----------------------------------------------------------- DELETE MODAL FORM DETAILS-------------------------------------------->
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div class="modal fade" id="deleteBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Delete This Rent</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="red">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="deleteRent(deleteIndexId)"
+                    data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cheque Image Modal -->
+<div class="modal fade" id="chequeImageModal" tabindex="-1" role="dialog" aria-labelledby="chequeImageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="chequeImageModalLabel">Cheque Image</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your cheque image here -->
+                <img [src]="selectedChequeImage" class="img-fluid" alt="Cheque Image">
+            </div>
+        </div>
+    </div>
+</div>

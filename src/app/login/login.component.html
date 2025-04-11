@@ -1,0 +1,38 @@
+<div class="bg_img">
+
+    <img style="display: flex; justify-content: center; margin: 0 auto;padding: 50px;"
+        src="assets/images/login-logo.jpeg">
+
+    <div class="login_container">
+        <mat-card style="padding: 40px; font-size: large; ">
+            <form [formGroup]="loginForm" title="Click to Enter" (ngSubmit)="loginUser()" type="">
+
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username:</mat-label>
+                        <input autocomplete="off" formControlName="email" style="color: black;" type="email" matInput
+                            placeholder="Email">
+                    </mat-form-field>
+                </p>
+
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password:</mat-label>
+                        <input autocomplete="off" formControlName="password" style="color: black;" type="password"
+                            matInput placeholder="Password">
+                    </mat-form-field>
+                </p>
+
+                <div *ngIf="firebaseErrorMessage != ''" class="error-style">
+                    <span>{{ firebaseErrorMessage }}</span>
+                </div>
+
+                <button mat-raised-button color="primary"><i class="bi bi-box-arrow-in-right p-1"></i>Login</button>
+            </form>
+        </mat-card>
+
+    </div>
+    <div *ngIf="!isSignedIn" class="welcome_msg">
+        <h2><b style="letter-spacing: 5px;">Welcome to Demo Application</b></h2>
+    </div>
+</div>

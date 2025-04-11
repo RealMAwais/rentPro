@@ -1,0 +1,38 @@
+<div class="widget-container mb-3">
+    <div class="widget green" [routerLink]="'/dashboard/company'">
+      <div class="icon">
+        <i class="bi bi-bank p-3"></i>
+      </div>
+      <div class="value">
+        <div class="top">{{companyLength}}</div>
+        <div class="bottom">Accounts</div>
+      </div>
+    </div>
+    <div class="widget yellow" [routerLink]="'/dashboard/building'">
+      <div class="icon">
+        <i class="bi bi-buildings p-3"></i>
+      </div>
+      <div class="value">
+        <div class="top">{{buildingLength}}</div>
+        <div class="bottom">Buildings</div>
+      </div>
+    </div>
+    <div class="widget red" [routerLink]="'/dashboard/unit'">
+      <div class="icon">
+        <i class="bi bi-building p-3"></i>
+      </div>
+      <div class="value">
+        <div class="top">{{unitLength}}</div>
+        <div class="bottom">Total Units</div>
+      </div>
+    </div>
+    <div class="widget blue" [routerLink]="'/dashboard/lease-summary'">
+      <div class="icon">
+        <i class="bi bi-journal p-3"></i>
+      </div>
+      <div class="value">
+        <div class="top">{{leaseLength}}</div>
+        <div class="bottom">Total Leases</div>
+      </div>
+    </div>
+  </div>
