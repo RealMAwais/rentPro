@@ -184,7 +184,7 @@
 
 
                 <td class="ellipsis-cell">
-                    <div class="tooltip-content" [ngbTooltip]="data.building ? data.building : ''">
+                    <div class="tooltip-content" [title]="data.building ? data.building : ''">
                         {{data.building}}
                     </div>
                 </td>
@@ -193,7 +193,7 @@
                         <span class="red-ball" title="This unit is vacant for this month."></span>VACANT
                     </ng-container>
                     <ng-container *ngIf="!data.isVacant">
-                        <span [ngbTooltip]="data.tenantName">{{data.tenantName}}</span>
+                        <span [title]="data.tenantName">{{data.tenantName}}</span>
                     </ng-container>
                 </td>
 

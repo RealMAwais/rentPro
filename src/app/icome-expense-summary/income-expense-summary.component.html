@@ -1,13 +1,13 @@
 <!-- Nav bar -->
 <nav class="navbar">
     <div>
-        <button class="btn-sm btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i
+        <button class="btn-sm btn-primary ml-5" [routerLink]="''" title="Home"><i
                 class="bi bi-house-door"></i></button>
-        <!-- <button class="btn  btn-sm btn-secondary ml-2" ngbTooltip="Save in Excel" (click)="exportExcel()"><i
+        <!-- <button class="btn  btn-sm btn-secondary ml-2" title="Save in Excel" (click)="exportExcel()"><i
                 class="bi bi-file-earmark-text p-1"></i>Save Excel</button> -->
-        <button *ngIf="filteredRents || filteredExpense" ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('summary', true)"><i
+        <button *ngIf="filteredRents || filteredExpense" title="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('summary', true)"><i
                 class="bi bi-file-pdf p-1"></i>Summary</button>
-        <button *ngIf="filteredRents || filteredExpense" ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('detail', true)"><i
+        <button *ngIf="filteredRents || filteredExpense" title="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf('detail', true)"><i
                 class="bi bi-file-pdf p-1"></i>Details</button>
         <button *ngIf="filteredRents || filteredExpense" class="btn btn-sm btn-primary ml-1" (click)="openConfirmationDialog('summary')"
             title="Send email"><i class="bi bi-envelope-at p-1"></i>Send Summary</button>

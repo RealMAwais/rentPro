@@ -12,7 +12,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { BuildingTableComponent } from './building-table/building-table.component'
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeaseComponent } from './lease/lease.component';
 import { RentPaymentsComponent } from './rent-payments/rent-payments.component';
 import { RentReportComponent } from './rent-report/rent-report.component';
@@ -50,7 +49,6 @@ import { LoaderService } from './services/loader.service';
   declarations: [
     AppComponent,
     BuildingTableComponent,
-    // HomeComponent,
     LeaseComponent,
     RentPaymentsComponent,
     RentReportComponent,
@@ -73,7 +71,7 @@ import { LoaderService } from './services/loader.service';
     ConfirmationDialogComponent
   ],
   imports: [
-    BrowserModule, NgbTooltipModule,
+    BrowserModule,
     AppRoutingModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -119,7 +117,6 @@ import { LoaderService } from './services/loader.service';
     ApiService,
     AppComponent,
     BuildingTableComponent,
-    // HomeComponent,
     LeaseComponent,
     RentPaymentsComponent,
     RentReportComponent,

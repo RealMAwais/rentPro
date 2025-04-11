@@ -1,9 +1,9 @@
 <!-- /////////////////////////-----------------NAVBAR-----------------------////////////////// -->
 <nav class="navbar">
     <div>
-        <button class="btn-sm btn-primary ml-5" [routerLink]="''" ngbTooltip="Home"><i class="bi bi-house-door"></i></button>
-        <button class="btn  btn-sm btn-secondary ml-2" ngbTooltip="Save in Excel" (click)="exportExcel()"><i class="bi bi-file-earmark-text p-1"></i>Save Excel</button>
-        <button ngbTooltip="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf()"><i class="bi bi-file-pdf p-1"></i>Save PDF</button>
+        <button class="btn-sm btn-primary ml-5" [routerLink]="''" title="Home"><i class="bi bi-house-door"></i></button>
+        <button class="btn  btn-sm btn-secondary ml-2" title="Save in Excel" (click)="exportExcel()"><i class="bi bi-file-earmark-text p-1"></i>Save Excel</button>
+        <button title="Save As PDF" class="btn btn-sm btn-danger ml-2" (click)="exportPdf()"><i class="bi bi-file-pdf p-1"></i>Save PDF</button>
         <button data-bs-toggle="modal" data-bs-target="#expenseModal" class="btn-sm btn-primary ml-2"><i class="bi bi-plus-circle">Add</i></button>
     </div>
     <div class="container-md" style="justify-content: center;">

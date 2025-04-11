@@ -43,10 +43,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.angularFireAuth.signOut().then(() => {
-      // Logout successful
-      // Redirect to login page or perform any additional tasks
     }).catch((error) => {
-      // Error occurred during logout
       console.error('Logout Error:', error);
     });
   }
